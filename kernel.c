@@ -62,7 +62,7 @@ void terminal_initialize(void)
 {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLUE);
+	terminal_color = vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK);
 	terminal_buffer = (uint16_t*) 0xB8000;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -85,16 +85,18 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 
 void terminal_putchar(char c) 
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
-		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
-	}
-	if (c == '\n') {
-		terminal_row++;
-		terminal_column = 0;
-	}
+    if (c == '\n') {
+		c = ' ';
+		terminal_putentryat(c, terminal_color, terminal_column, terminal_row++);
+        terminal_column = 0;
+        return;
+    }
+    terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+    if (++terminal_column >= VGA_WIDTH) {
+        terminal_column = 0;
+        if (++terminal_row >= VGA_HEIGHT)
+            terminal_row = 0;
+    }
 }
 
 void terminal_write(const char* data, size_t size) 
@@ -114,6 +116,5 @@ void kernel_main(void)
 	terminal_initialize();
 
 	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!\n");
-	terminal_writestring("SOSAL?\n");
+	terminal_writestring("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
 }
