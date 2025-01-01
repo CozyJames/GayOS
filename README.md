@@ -21,3 +21,8 @@
    cp grub.cfg isodir/boot/grub/grub.cfg
    grub-mkrescue -o myos.iso isodir
    ```
+
+## To Do List
+1. Поддержка ввода/вывода строк в терминал
+2. Пролистывание терминала
+3. Поддержка ASCII рисунков
