@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -110,11 +111,122 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
+//реализация функций для printf
+
+void insert(char* buff, int index_point, int size, char sym) {
+    for(int i = size; i > index_point; i--) {
+        buff[i] = buff[i - 1];
+    }
+    buff[index_point] = sym;
+}
+
+float round(float a, int b) {
+
+}
+
+void reverse(char* start, char* end) {
+    while (start < end) {
+        char temp = *start;
+        *start = *end;
+        *end = temp;
+        start++;
+        end--;
+    }
+}
+
+void int_to_char(int val) {
+    char* buffer;
+    int i = 0;
+    if(val < 0) {
+        val = -val;
+        terminal_putchar('-');
+    }
+    while(val > 0) {
+        buffer[i++] = (val % 10) + 0x30;
+		val /= 10;
+    }
+    reverse(buffer, buffer + i - 1);
+    buffer[i] = '\0';
+    terminal_write(buffer, i);
+}
+
+void float_to_char(float val) {
+	char* buffer;
+	if(val < 0) {
+        val = -val;
+        terminal_putchar('-');
+    }
+	int val_int = val;
+	int val_float = val * 1000; // точность тысячные
+	int i = 0;
+    int index_point = 0;
+    while(val_float > 0) {
+        if(val_int > 0) {
+            index_point++;
+            val_int /= 10;
+        }
+        buffer[i++] = (val_float % 10) + 0x30;
+        val_float /= 10; 
+    }
+	reverse(buffer, buffer + i - 1);
+    insert(buffer, index_point, i, '.');
+	buffer[i + index_point] = '\n';
+	terminal_write(buffer, i + index_point);
+}
+
+
+void printff(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char c;
+    const char* s;
+	int d;
+	float f;
+    for(const char* symbol = format; *symbol != '\0'; symbol++) {
+		if(*symbol == '%') {
+			switch(*(symbol + 1))
+			{
+				case('c'):
+					c = (char)va_arg(args, int);
+                    terminal_putchar(c);
+                    symbol++;
+                    break;
+                case('s'):
+                    s = va_arg(args, const char*);
+                    terminal_write(s, strlen(s));
+                    symbol++;
+                    break;
+                case('d'):
+                    d = va_arg(args, int);
+                    int_to_char(d);
+                    symbol++;
+                    break;
+                case('f'):
+					f = (float)va_arg(args, double);
+					float_to_char(f);
+					symbol++;
+                    break;
+			}
+		}
+		else terminal_putchar(*symbol);
+	}
+	terminal_putchar('\n');
+    va_end(args);
+}
+
 void kernel_main(void) 
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
 
+	char s = '1';
+	const char* str = "Hm... it is";
+	int a = -2134;
+	float f = 1134.129123; // на 7-9 уходит одна десятая
+
 	/* Newline support is left as an exercise. */
-	terminal_writestring("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
+	printff("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
+	printff("Hello world %c OMG!!!! %s AHAHAHAHAH", s, str);
+	printff("GOOD JOB %d", a);
+	printff("mmmmmmmm. New float? %f", f);
 }
