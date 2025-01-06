@@ -14,6 +14,9 @@ i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel
 =======
 REM Assemble boot.s into an object file
 i686-elf-as kernel\arch\i386\boot.s -o boot.o
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 REM Compile kernel.c
@@ -34,6 +37,9 @@ wsl -d kali-linux cp grub.cfg isodir/boot/grub/grub.cfg
 =======
 wsl -d kali-linux cp kernel/grub.cfg isodir/boot/grub/grub.cfg
 >>>>>>> Stashed changes
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 REM Create ISO using WSL in Kali
