@@ -26,7 +26,11 @@ stack_top:
 
 _start:
 
+<<<<<<< Updated upstream
 	movl $stack_top, %esp
+=======
+	mov $stack_top, %esp
+>>>>>>> Stashed changes
 
 	# Transfer control to the main kernel.
 	call kernel_main
