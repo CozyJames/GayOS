@@ -1,46 +1,18 @@
 @echo off
-<<<<<<< Updated upstream
-REM Сборка boot.s в объектный файл
-i686-elf-as kernel\arch\i386\boot.s -o boot.o
 
-REM Компиляция kernel.c
-i686-elf-gcc -c kernel\kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-
-REM Линковка
-<<<<<<< Updated upstream
-i686-elf-gcc -T kernel\arch\i386\linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
-=======
-i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
-=======
 REM Assemble boot.s into an object file
 i686-elf-as kernel\arch\i386\boot.s -o boot.o
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 REM Compile kernel.c
 i686-elf-gcc -c kernel\kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 REM Link files
 i686-elf-gcc -T kernel\arch\i386\linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
->>>>>>> Stashed changes
 
 REM Copy files to isodir/boot using WSL in Kali
 wsl -d kali-linux cp myos.bin isodir/boot/myos.bin
-<<<<<<< Updated upstream
 
-<<<<<<< Updated upstream
 wsl -d kali-linux cp kernel/grub.cfg isodir/boot/grub/grub.cfg
-=======
-wsl -d kali-linux cp grub.cfg isodir/boot/grub/grub.cfg
-=======
-wsl -d kali-linux cp kernel/grub.cfg isodir/boot/grub/grub.cfg
->>>>>>> Stashed changes
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 REM Create ISO using WSL in Kali
 wsl -d kali-linux grub-mkrescue -o myos.iso isodir
