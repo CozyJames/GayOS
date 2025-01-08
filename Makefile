@@ -7,4 +7,4 @@ LDFLAGS = -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
 all:
 	$(AS) kernel/arch/i386/boot.s -o boot.o
 	$(CC) -c kernel/kernel.c -o kernel.o $(CFLAGS)
-	$(CC) -T kernel/arch/i386/linker.ld -o myos.bin $(LDFLAGS)
+	$(CC) -T kernel/arch/i386/linker.ld -o os.bin $(LDFLAGS)
