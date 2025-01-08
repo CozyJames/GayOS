@@ -1,24 +1,30 @@
 @echo off
 
-REM Assemble boot.s into an object file
-i686-elf-as kernel\arch\i386\boot.s -o boot.o
+REM Compile through Make
 
-REM Compile kernel.c
-i686-elf-gcc -c kernel\kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+echo [INFO] Compiling through Makefile...
 
-REM Link files
-i686-elf-gcc -T kernel\arch\i386\linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+wsl -d kali-linux make -s
 
 REM Copy files to isodir/boot using WSL in Kali
-wsl -d kali-linux cp myos.bin isodir/boot/myos.bin
 
+echo [INFO] Copying files...
+
+wsl -d kali-linux cp myos.bin isodir/boot/myos.bin
 wsl -d kali-linux cp kernel/grub.cfg isodir/boot/grub/grub.cfg
 
 REM Create ISO using WSL in Kali
+
+echo [INFO] Creating ISO...
+
 wsl -d kali-linux grub-mkrescue -o myos.iso isodir
 
 echo.
 echo [INFO] Compiling done.
+
+echo [INFO] Cleaning up...
+
+wsl -d kali-linux rm -f *.o *.bin
 
 REM Ask the user if they want to run the ISO on the virtual machine
 :ask
