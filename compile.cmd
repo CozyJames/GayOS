@@ -21,10 +21,6 @@ echo [INFO] Creating ISO...
 echo.
 echo [INFO] Compiling done.
 
-echo [INFO] Cleaning up...
-
-wsl -d kali-linux rm -f *.o *.bin
-
 :ask
 set /p choice=Run the ISO on the virtual machine? (Y/N) [Default=Y]: 
 
@@ -36,7 +32,7 @@ echo Invalid choice. Please enter Y or N.
 goto ask
 
 :run
-qemu-system-i386 -cdrom GayOS.iso
+qemu-system-i386 -cdrom %name%.iso
 goto end
 
 :end

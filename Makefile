@@ -36,9 +36,9 @@ LDFLAGS = -ffreestanding -O2 -nostdlib -lgcc
 LINKER_SCRIPT = $(ARCHDIR)/linker.ld
 
 LINK_LIST = \
-$(ARCHDIR)/boot.o \
 $(ARCHDIR)/crti.o \
 $(ELFDIR)/crtbegin.o \
+$(ARCHDIR)/boot.o \
 $(COBJ) \
 $(ELFDIR)/crtend.o \
 $(ARCHDIR)/crtn.o
