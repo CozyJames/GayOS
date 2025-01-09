@@ -25,8 +25,9 @@ stack_top:
 .type _start, @function
 
 _start:
-
 	mov $stack_top, %esp
+
+	call _init
 
 	# Transfer control to the main kernel.
 	call kernel_main
