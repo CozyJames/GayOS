@@ -9,6 +9,7 @@ CC = i686-elf-gcc.exe
 ###############################################################################
 ELFDIR  = C:/i686-tools/lib/gcc/i686-elf/13.2.0
 ARCHDIR = kernel/arch/i386
+LIBDIR = kernel/lib
 
 ###############################################################################
 # Исходники (Assembler)
@@ -24,8 +25,15 @@ SOBJ = $(SSOURCES:.s=.o)
 ###############################################################################
 # Исходники (C)
 ###############################################################################
-CSOURCES = kernel/kernel.c
-COBJ     = kernel.o
+CSOURCES = \
+kernel/kernel.c \
+$(LIBDIR)/tty.c \
+$(LIBDIR)/string.c \
+$(LIBDIR)/stdio.c \
+$(LIBDIR)/algorithm.c \
+$(LIBDIR)/math.c
+
+COBJ = $(CSOURCES:.c=.o)
 
 ###############################################################################
 # Флаги компиляции и линковки
@@ -58,7 +66,7 @@ $(TARGET): $(SOBJ) $(COBJ)
 	$(CC) -T $(LINKER_SCRIPT) -o $@ $(LDFLAGS) $(LINK_LIST)
 
 # Сборка C-файлов
-kernel.o: $(CSOURCES)
+%.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 # Сборка Assembler-файлов

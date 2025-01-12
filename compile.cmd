@@ -1,5 +1,7 @@
 @echo off
 
+call clean.cmd
+
 echo [INFO] Compiling through Makefile...
 
 wsl -d kali-linux make -s
