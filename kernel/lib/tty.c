@@ -68,6 +68,7 @@ void terminal_putchar(char c)
             terminal_row = VGA_HEIGHT - 1;
         }
         terminal_column = 0;
+        move_cursor(terminal_column, terminal_row);
         return;
     }
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
