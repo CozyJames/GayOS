@@ -20,23 +20,33 @@ size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
 
+__attribute__((noinline)) void test(void)
+{
+    // volatile char buf[8];
+    // for (int i = 0; i < 7; i++)
+    //     buf[i] = 'A';
+
+    // for (int i = 0; i < 7; i++) {
+	// 	printf("%d ", buf[i]);
+    // }
+
+	// int *top = 0xB00;
+	// printf("%p\n", top);
+}
+
+
+
 void kernel_main(void) 
 {
+
 	terminal_initialize();
 
-	char s = '1';
-	const char* str = "Hm... it is";
-	int a = -2134;
-	float f = 1134.129123;
-	printf("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
-	printf("Hello world %c OMG!!!! %s AHAHAHAHAH\n", s, str);
-	printf("GOOD JOB %d BAD JOB %f\n", a, f);
+	test();
 
-	char* username = "root";
-	char* pc_name = "shitbox";
+	printf("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
+
 	while(1)
 	{
-		// printf("%s@%s:~$ ", username, pc_name);
 		keyboard_interrupt_handler();
 	}
 }

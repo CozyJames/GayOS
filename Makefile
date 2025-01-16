@@ -30,6 +30,8 @@ kernel/kernel.c \
 $(LIBDIR)/tty.c \
 $(LIBDIR)/string.c \
 $(LIBDIR)/stdio.c \
+$(LIBDIR)/panic.c \
+$(LIBDIR)/protector.c \
 $(LIBDIR)/algorithm.c \
 $(LIBDIR)/math.c
 
@@ -38,7 +40,7 @@ COBJ = $(CSOURCES:.c=.o)
 ###############################################################################
 # Флаги компиляции и линковки
 ###############################################################################
-CFLAGS  = -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CFLAGS  = -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fstack-protector-all
 LDFLAGS = -ffreestanding -O2 -nostdlib -lgcc
 
 LINKER_SCRIPT = $(ARCHDIR)/linker.ld

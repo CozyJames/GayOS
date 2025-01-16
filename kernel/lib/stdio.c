@@ -54,6 +54,7 @@ void printf(const char* format, ...) {
     const char* s;
 	int d;
 	float f;
+    uint16_t* p;
     for(const char* symbol = format; *symbol != '\0'; symbol++) {
 		if(*symbol == '%') {
 			switch(*(symbol + 1))
@@ -76,6 +77,11 @@ void printf(const char* format, ...) {
                 case('f'):
 					f = (float)va_arg(args, double);
 					float_to_char(f);
+					symbol++;
+                    break;
+                case('p'):
+					p = va_arg(args, uint16_t*);
+                    printf("%c", p);
 					symbol++;
                     break;
 			}
