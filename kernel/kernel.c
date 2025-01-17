@@ -19,6 +19,9 @@ size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
+const size_t VGA_WIDTH = 80;
+const size_t VGA_HEIGHT = 25;
+bool list[25];
 
 __attribute__((noinline)) void test(void)
 {
@@ -30,7 +33,7 @@ __attribute__((noinline)) void test(void)
 	// 	printf("%d ", buf[i]);
     // }
 
-	// int *top = 0xB00;
+	// uintptr_t top = 0xB800;
 	// printf("%p\n", top);
 }
 
@@ -45,8 +48,13 @@ void kernel_main(void)
 
 	printf("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
 
-	while(1)
+    printf("%s@%s:~$ ", username, pc_name);
+
+	while (1) 
 	{
-		keyboard_interrupt_handler();
-	}
+        if(keyboard_interrupt_handler() == KEYBOARD_PRESS_ENTER)
+		{
+            printf("%s@%s:~$ ", username, pc_name);
+        }
+    }
 }

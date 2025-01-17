@@ -3,6 +3,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
+
+extern bool list[25];
 
 extern size_t terminal_row;
 extern size_t terminal_column;

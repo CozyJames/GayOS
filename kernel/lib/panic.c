@@ -2,7 +2,7 @@
 #include "include/stdio.h"
 #include "include/panic.h"
 
-__attribute__((noreturn)) void panic(const char* fmt, ...)
+_Noreturn void panic(const char* fmt, ...)
 {
     printf("Kernel panic: %s", fmt);
 

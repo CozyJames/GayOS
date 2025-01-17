@@ -1,10 +1,16 @@
 #include "include/stdio.h"
 #include "include/algorithm.h"
 #include "include/string.h"
+#include "include/tty.h"
+#include "include/math.h"
 
 void int_to_char(int val) {
-    char* buffer;
+    char buffer[12];
     int i = 0;
+    if(val == 0) {
+        terminal_putchar('0');
+        return;
+    }
     if(val < 0) {
         val = -val;
         terminal_putchar('-');
@@ -81,7 +87,7 @@ void printf(const char* format, ...) {
                     break;
                 case('p'):
 					p = va_arg(args, uint16_t*);
-                    printf("%c", p);
+                    printf("%d", p);
 					symbol++;
                     break;
 			}

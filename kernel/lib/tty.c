@@ -6,6 +6,7 @@
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
+static int cnt = 0;
 
 void move_cursor(uint16_t x, uint16_t y) {
     uint16_t position = y * VGA_WIDTH + x;
@@ -60,7 +61,7 @@ void terminal_descent() {
 void terminal_putchar(char c) 
 {
     if (c == '\n') {
-        c = ' ';
+        c = '\0';
         terminal_putentryat(c, terminal_color, terminal_column++, terminal_row);
         if (++terminal_row >= VGA_HEIGHT) {
             remove_char(terminal_column, VGA_HEIGHT);
@@ -68,12 +69,17 @@ void terminal_putchar(char c)
             terminal_row = VGA_HEIGHT - 1;
         }
         terminal_column = 0;
+        list[terminal_row] = false;
         move_cursor(terminal_column, terminal_row);
+        cnt = 0;
         return;
     }
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column >= VGA_WIDTH) {
+        list[terminal_row + 1] = true;
         if (++terminal_row >= VGA_HEIGHT) {
+            list[terminal_row - 1] = true;
+            list[VGA_HEIGHT - (cnt++) - 1] = true;
             terminal_row = VGA_HEIGHT - 1;
             terminal_descent();
         }

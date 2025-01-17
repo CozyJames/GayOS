@@ -4,6 +4,12 @@
 #include "stdio.h"
 #include "tty.h"
 #include "io.h"
+#include "const.h"
+#include <stdbool.h>
+
+extern bool list[25];
+const char* username = "root";
+const char* pc_name = "shitbox";
 
 #define KBD_DATA_PORT 0x60   // порт для данных клавиатуры
 #define KBD_STATUS_PORT 0x64 // порт для статуса клавиатуры
@@ -107,6 +113,13 @@ enum {
     KEYBOARD_PRESS_F12 = 0x58
 };
 
+char case_change(bool status, char smallKey, char bigKey) 
+{
+    return status ? bigKey : smallKey;
+}
+
+bool capsLockPress = false;
+
 char key_reader(uint8_t key) {
 	switch(key) {
 		case (uint8_t)KEYBOARD_PRESS_ESCAPE: return false;
@@ -122,43 +135,55 @@ char key_reader(uint8_t key) {
 		case (uint8_t)KEYBOARD_PRESS_0: return('0');
 		case (uint8_t)KEYBOARD_PRESS_DASH: return('-');
 		case (uint8_t)KEYBOARD_PRESS_EQUALS: return('=');
-        case (uint8_t)KEYBOARD_PRESS_BACKSPACE: (terminal_column == 0) ? remove_char(terminal_column, terminal_row) : remove_char(--terminal_column, terminal_row); return 0;
-        case (uint8_t)KEYBOARD_PRESS_TAB: break; // хз
-        case (uint8_t)KEYBOARD_PRESS_Q: return('q');
-        case (uint8_t)KEYBOARD_PRESS_W: return('w');
-        case (uint8_t)KEYBOARD_PRESS_E: return('e');
-        case (uint8_t)KEYBOARD_PRESS_R: return('r');
-        case (uint8_t)KEYBOARD_PRESS_T: return('t');
-        case (uint8_t)KEYBOARD_PRESS_Y: return('y');
-        case (uint8_t)KEYBOARD_PRESS_U: return('u');
-        case (uint8_t)KEYBOARD_PRESS_I: return('i');
-        case (uint8_t)KEYBOARD_PRESS_O: return('o');
-        case (uint8_t)KEYBOARD_PRESS_P: return('p');
+        case (uint8_t)KEYBOARD_PRESS_BACKSPACE:
+            if(list[terminal_row]) {
+                if(terminal_column == 0) {
+                    list[terminal_row--] = false;
+                    terminal_column = VGA_WIDTH;
+                }
+                remove_char(--terminal_column, terminal_row);
+            }
+            else if(terminal_column == strlen(username) + strlen(pc_name) + 5) {
+                remove_char(terminal_column, terminal_row);
+            }
+            else  remove_char(--terminal_column, terminal_row);
+            return 0;
+        case (uint8_t)KEYBOARD_PRESS_TAB: printf("    "); return 0;
+        case (uint8_t)KEYBOARD_PRESS_Q: return case_change(capsLockPress, 'q', 'Q');
+        case (uint8_t)KEYBOARD_PRESS_W: return case_change(capsLockPress, 'w', 'W');
+        case (uint8_t)KEYBOARD_PRESS_E: return case_change(capsLockPress, 'e', 'E');
+        case (uint8_t)KEYBOARD_PRESS_R: return case_change(capsLockPress, 'r', 'R');
+        case (uint8_t)KEYBOARD_PRESS_T: return case_change(capsLockPress, 't', 'T');
+        case (uint8_t)KEYBOARD_PRESS_Y: return case_change(capsLockPress, 'y', 'Y');
+        case (uint8_t)KEYBOARD_PRESS_U: return case_change(capsLockPress, 'u', 'U');
+        case (uint8_t)KEYBOARD_PRESS_I: return case_change(capsLockPress, 'i', 'I');
+        case (uint8_t)KEYBOARD_PRESS_O: return case_change(capsLockPress, 'o', 'O');
+        case (uint8_t)KEYBOARD_PRESS_P: return case_change(capsLockPress, 'p', 'P');
         case (uint8_t)KEYBOARD_PRESS_SQUARE_BRACKET_LEFT: return('[');
         case (uint8_t)KEYBOARD_PRESS_SQUARE_BRACKET_RIGHT: return(']');
         case (uint8_t)KEYBOARD_PRESS_ENTER: return('\n');
         case (uint8_t)KEYBOARD_PRESS_LEFT_CONTROL: break; // хз
-        case (uint8_t)KEYBOARD_PRESS_A: return('a');
-        case (uint8_t)KEYBOARD_PRESS_S: return('s');
-        case (uint8_t)KEYBOARD_PRESS_D: return('d');
-        case (uint8_t)KEYBOARD_PRESS_F: return('f');
-        case (uint8_t)KEYBOARD_PRESS_G: return('g');
-        case (uint8_t)KEYBOARD_PRESS_H: return('h');
-        case (uint8_t)KEYBOARD_PRESS_J: return('j');
-        case (uint8_t)KEYBOARD_PRESS_K: return('k');
-        case (uint8_t)KEYBOARD_PRESS_L: return('l');
+        case (uint8_t)KEYBOARD_PRESS_A: return case_change(capsLockPress, 'a', 'A');
+        case (uint8_t)KEYBOARD_PRESS_S: return case_change(capsLockPress, 's', 'S');
+        case (uint8_t)KEYBOARD_PRESS_D: return case_change(capsLockPress, 'd', 'D');
+        case (uint8_t)KEYBOARD_PRESS_F: return case_change(capsLockPress, 'f', 'F');
+        case (uint8_t)KEYBOARD_PRESS_G: return case_change(capsLockPress, 'g', 'G');
+        case (uint8_t)KEYBOARD_PRESS_H: return case_change(capsLockPress, 'h', 'H');
+        case (uint8_t)KEYBOARD_PRESS_J: return case_change(capsLockPress, 'j', 'J');
+        case (uint8_t)KEYBOARD_PRESS_K: return case_change(capsLockPress, 'k', 'K');
+        case (uint8_t)KEYBOARD_PRESS_L: return case_change(capsLockPress, 'l', 'L');
         case (uint8_t)KEYBOARD_PRESS_SEMICOLON: return(';');
         case (uint8_t)KEYBOARD_PRESS_SINGLE_QUOTE: return('\'');
         case (uint8_t)KEYBOARD_PRESS_BACKTICK: return('`');
         case (uint8_t)KEYBOARD_PRESS_LEFT_SHIFT: break; // хз
         case (uint8_t)KEYBOARD_PRESS_BACKSLASH: return('\\');
-        case (uint8_t)KEYBOARD_PRESS_Z: return('z');
-        case (uint8_t)KEYBOARD_PRESS_X: return('x');
-        case (uint8_t)KEYBOARD_PRESS_C: return('c');
-        case (uint8_t)KEYBOARD_PRESS_V: return('v');
-        case (uint8_t)KEYBOARD_PRESS_B: return('b');
-        case (uint8_t)KEYBOARD_PRESS_N: return('n');
-        case (uint8_t)KEYBOARD_PRESS_M: return('m');
+        case (uint8_t)KEYBOARD_PRESS_Z: return case_change(capsLockPress, 'z', 'Z');
+        case (uint8_t)KEYBOARD_PRESS_X: return case_change(capsLockPress, 'x', 'X');
+        case (uint8_t)KEYBOARD_PRESS_C: return case_change(capsLockPress, 'c', 'C');
+        case (uint8_t)KEYBOARD_PRESS_V: return case_change(capsLockPress, 'v', 'V');
+        case (uint8_t)KEYBOARD_PRESS_B: return case_change(capsLockPress, 'b', 'B');
+        case (uint8_t)KEYBOARD_PRESS_N: return case_change(capsLockPress, 'n', 'N');
+        case (uint8_t)KEYBOARD_PRESS_M: return case_change(capsLockPress, 'm', 'M');
         case (uint8_t)KEYBOARD_PRESS_COMMA: return(',');
         case (uint8_t)KEYBOARD_PRESS_PERIOD: return('.');
         case (uint8_t)KEYBOARD_PRESS_NUM_SLASH: return('/');
@@ -166,7 +191,7 @@ char key_reader(uint8_t key) {
         case (uint8_t)KEYBOARD_PRESS_NUM_ASTERISK: return('*');
         case (uint8_t)KEYBOARD_PRESS_LEFT_ALT: break; // хз
         case (uint8_t)KEYBOARD_PRESS_SPACE: return(' ');
-        case (uint8_t)KEYBOARD_PRESS_CAPSLOCK: break; // хз
+        case (uint8_t)KEYBOARD_PRESS_CAPSLOCK: capsLockPress = !capsLockPress; return 0;
         case (uint8_t)KEYBOARD_PRESS_F1: break; // хз
         case (uint8_t)KEYBOARD_PRESS_F2: break; // хз
         case (uint8_t)KEYBOARD_PRESS_F3: break; // хз
@@ -204,7 +229,9 @@ char key_reader(uint8_t key) {
         case (uint8_t)KEYBOARD_PRESS_NUM_7: return '7';
         case (uint8_t)KEYBOARD_PRESS_NUM_8: return '8';
         case (uint8_t)KEYBOARD_PRESS_NUM_9: return '9';
+        default: return 0;
 	}
+    return 0;
 }
 
 // функция для чтения данных с клавиатурного порта
@@ -214,7 +241,7 @@ uint8_t read_kbd_data() {
 }
 
 // обработчик прерывания для клавиатуры
-void keyboard_interrupt_handler() {
+uint8_t keyboard_interrupt_handler() {
     uint8_t scan_code = read_kbd_data(); // получаем скан-код
 
     if (scan_code < KEYS_SIZE) {
@@ -223,6 +250,7 @@ void keyboard_interrupt_handler() {
             printf("%c", key);
         }
     }
+    return scan_code;
 }
 
 #endif /* KBD_H */
