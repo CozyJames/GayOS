@@ -11,12 +11,15 @@
 - `sudo apt install xorriso`
 - `sudo apt install make`
 
-## Запуск через compile.cmd
-1. В Makefile указать собственный путь на компилятор `ELFDIR  = .../i686-tools/lib/gcc/i686-elf/13.2.0`
+## Запуск ISO
+- Запускаем либо через `start.cmd` либо вручную `qemu-system-i386 -cdrom GayOS.iso`
+
+## Компиляция и запуск через compile.cmd
+1. В Makefile указать свой путь до данной папки `ELFDIR  = .../i686-tools/lib/gcc/i686-elf/13.2.0`
 2. _(Опционально)_ Изменить значения `CFLAGS` и `LDFLAGS` на необходимые
 
-## Ручной запуск
-1. В Makefile указать собственный путь на компилятор `ELFDIR  = .../i686-tools/lib/gcc/i686-elf/13.2.0`
+## Ручная компиляция
+1. В Makefile указать свой путь до данной папки `ELFDIR  = .../i686-tools/lib/gcc/i686-elf/13.2.0`
 2. _(Опционально)_ Изменить значения `CFLAGS` и `LDFLAGS` на необходимые
 3. Запускаем WSL
 4. Запускаем Makefile командой `make -s`
@@ -24,7 +27,6 @@
 - `cp os.bin isodir/boot/os.bin`
 - `cp kernel/grub.cfg isodir/boot/grub/grub.cfg`
 7. Создаём ISO `grub-mkrescue -o GayOS.iso isodir`
-8. Запускаем ISO через QEMU `qemu-system-i386 -cdrom GayOS.iso`
 
 ## To Do List
 1. Поддержка ввода с клавиатуры
