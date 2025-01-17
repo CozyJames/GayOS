@@ -1,6 +1,11 @@
 # GayOS
 
-## Требования для Windows
+**Для быстрого и комфортного запуска рекомендуется использовать QEMU.**
+
+## Запуск ISO
+Можно запустить через `start.cmd`, вручную командой `qemu-system-i386 -cdrom GayOS.iso` или любым другим эмулятором
+
+## Требования для компиляции на Windows
 - Компилятор GCC [i686-elf-tools](https://github.com/lordmilko/i686-elf-tools). _**В PATH указать на i686-tools\bin**_ 
 - QEMU (system-i386). _**В PATH указать на папку \qemu**_ 
 - WSL (kali-linux) `wsl --install -d kali-linux`. _**Установка через PowerShell**_
@@ -10,9 +15,6 @@
 - `sudo apt install grub-pc-bin`
 - `sudo apt install xorriso`
 - `sudo apt install make`
-
-## Запуск ISO
-- Запускаем либо через `start.cmd` либо вручную `qemu-system-i386 -cdrom GayOS.iso`
 
 ## Компиляция и запуск через compile.cmd
 1. В Makefile указать свой путь до данной папки `ELFDIR  = .../i686-tools/lib/gcc/i686-elf/13.2.0`
