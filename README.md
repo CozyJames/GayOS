@@ -24,7 +24,7 @@
 - `cp os.bin isodir/boot/os.bin`
 - `cp kernel/grub.cfg isodir/boot/grub/grub.cfg`
 7. Создаём ISO `grub-mkrescue -o GayOS.iso isodir`
-8. Запускаем ISO через qemu `qemu-system-i386 -cdrom GayOS.iso`
+8. Запускаем ISO через QEMU `qemu-system-i386 -cdrom GayOS.iso`
 
 ## To Do List
 1. Поддержка ввода с клавиатуры
