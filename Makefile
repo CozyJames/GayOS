@@ -33,7 +33,8 @@ $(LIBDIR)/stdio.c \
 $(LIBDIR)/panic.c \
 $(LIBDIR)/protector.c \
 $(LIBDIR)/algorithm.c \
-$(LIBDIR)/math.c
+$(LIBDIR)/math.c \
+$(LIBDIR)/stdlib.c
 
 COBJ = $(CSOURCES:.c=.o)
 
