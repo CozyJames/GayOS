@@ -18,3 +18,10 @@ int strcmp(const char* string1, const char* string2) {
     return 0;
 }
 
+void *memset(void *memptr, int val, unsigned num) {
+    unsigned char *m = (unsigned char *)memptr;
+    for (size_t i = 0; i < num; i++) {
+        m[i] = (unsigned char)val;
+    }
+    return memptr;
+}
