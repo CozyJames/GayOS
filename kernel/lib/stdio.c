@@ -21,6 +21,7 @@ void int_to_char(int val) {
     }
     reverse(buffer, buffer + i - 1);
     terminal_write(buffer, i);
+    free(buffer);
 }
 
 void float_to_char(float val) {
@@ -51,6 +52,7 @@ void float_to_char(float val) {
     reverse(buffer, buffer + i - 1);
     insert(buffer, index_point, i + 1, '.');
     terminal_write(buffer, i + 1);
+    free(buffer);
 }
 
 void printf(const char* format, ...) {
