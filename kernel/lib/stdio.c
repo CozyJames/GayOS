@@ -5,7 +5,7 @@
 #include "include/math.h"
 
 void int_to_char(int val) {
-    char* buffer = char* buffer = (char*)calloc(12, sizeof(char));;
+    char* buffer = (char*)calloc(12, sizeof(char));
     int i = 0;
     if(val == 0) {
         terminal_putchar('0');
@@ -24,7 +24,7 @@ void int_to_char(int val) {
 }
 
 void float_to_char(float val) {
-    char* buffer = char* buffer = (char*)calloc(33, sizeof(char));;
+    char* buffer = (char*)calloc(33, sizeof(char));
     if(val < 0) {
         val = -val;
         terminal_putchar('-');
