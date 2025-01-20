@@ -1,6 +1,6 @@
 #include "include/string.h"
 
-size_t strlen(const char* str)
+size_t strlen(const char *str)
 {
     size_t len = 0;
     while (str[len])
@@ -8,7 +8,7 @@ size_t strlen(const char* str)
     return len;
 }
 
-int strcmp(const char* string1, const char* string2) {
+int strcmp(const char *string1, const char *string2) {
     size_t len_string1 = strlen(string1);
     size_t len_string2 = strlen(string2);
     if(len_string1 != len_string2) return 1;
@@ -24,4 +24,11 @@ void *memset(void *memptr, int val, unsigned num) {
         m[i] = (unsigned char)val;
     }
     return memptr;
+}
+
+void *memcpy(void *dest, void *src, size_t count) {
+    unsigned char *d = (unsigned char*)dest;
+    unsigned char *s = (unsigned char*)src;
+    for (size_t i = 0; i < count; i++) d[i] = s[i];
+    return dest;
 }

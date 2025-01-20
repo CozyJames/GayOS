@@ -65,7 +65,25 @@ void *calloc(unsigned n, unsigned m) {
 }
 
 void *realloc(void *bl, unsigned ns) {
-    
+    if (bl == NULL) {
+        return malloc(ns);
+    }
+    if (ns == 0) {
+        free(bl);
+        return NULL;
+    }
+    Header *bp = (Header *)bl - 1;
+    unsigned old_size = bp->s.size * sizeof(Header);
+    if (ns <= old_size) {
+        return bl;
+    }
+    void *new_block = malloc(ns);
+    if (new_block == NULL) {
+        return NULL;
+    }
+    memcpy(new_block, bl, old_size);
+    free(bl);
+    return new_block;
 }
 
 void free(void *ap) {
