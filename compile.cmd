@@ -1,21 +1,43 @@
 @echo off
-REM Сборка boot.s в объектный файл
-i686-elf-as boot.s -o boot.o
 
-REM Компиляция kernel.c
-i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+call clean.cmd
 
-REM Линковка
-i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+echo [INFO] Compiling through Makefile...
 
-REM Копируем в isodir/boot (через WSL в Kali)
-wsl -d kali-linux cp myos.bin isodir/boot/myos.bin
+wsl -d kali-linux make -s
 
-wsl -d kali-linux cp grub.cfg isodir/boot/grub/grub.cfg
+echo [INFO] Copying files...
 
-REM Создаём ISO (через WSL в Kali)
-wsl -d kali-linux grub-mkrescue -o myos.iso isodir
+wsl -d kali-linux cp os.bin isodir/boot/os.bin
+wsl -d kali-linux cp kernel/grub.cfg isodir/boot/grub/grub.cfg
+
+:ask
+set /p name=Enter a name for the .iso file [Default=GayOS]: 
+
+if "%name%"=="" set name="GayOS"
+
+wsl -d kali-linux grub-mkrescue -o %name%.iso isodir
+
+echo [INFO] Creating ISO...
 
 echo.
 echo [INFO] Compiling done.
+
+:ask
+set /p choice=Run the ISO on the virtual machine? (Y/N) [Default=Y]: 
+
+if "%choice%"=="" set choice=Y
+
+if /i "%choice%"=="Y" goto run
+if /i "%choice%"=="N" goto end
+echo Invalid choice. Please enter Y or N.
+goto ask
+
+:run
+qemu-system-i386 -cdrom %name%.iso
+goto end
+
+:end
 pause
+
+
