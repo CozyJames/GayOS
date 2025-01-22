@@ -5,12 +5,12 @@
 #include "include/math.h"
 
 void int_to_char(int val) {
-    char* buffer = (char*)calloc(12, sizeof(char));
-    int i = 0;
     if(val == 0) {
         terminal_putchar('0');
         return;
     }
+    char* buffer = (char*)calloc(12, sizeof(char));
+    int i = 0;
     if(val < 0) {
         val = -val;
         terminal_putchar('-');
@@ -39,6 +39,7 @@ void float_to_char(float val) {
         count_factional++;
     }
     size_t index_point = 0;
+    if(val_int == 0) terminal_putchar('0');
      while(val_int > 0) {
         index_point++;
         val_int /= 10;
