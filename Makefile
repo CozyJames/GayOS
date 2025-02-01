@@ -17,7 +17,8 @@ LIBDIR = kernel/lib
 SSOURCES = \
 $(ARCHDIR)/boot.s \
 $(ARCHDIR)/crti.s \
-$(ARCHDIR)/crtn.s
+$(ARCHDIR)/crtn.s \
+$(ARCHDIR)/gdt_flush.s
 
 # Превращаем файл.s в файл.o 
 SOBJ = $(SSOURCES:.s=.o)
@@ -34,7 +35,8 @@ $(LIBDIR)/panic.c \
 $(LIBDIR)/protector.c \
 $(LIBDIR)/algorithm.c \
 $(LIBDIR)/math.c \
-$(LIBDIR)/stdlib.c
+$(LIBDIR)/stdlib.c \
+$(LIBDIR)/gdt.c
 
 COBJ = $(CSOURCES:.c=.o)
 
@@ -50,6 +52,7 @@ LINK_LIST = \
 $(ARCHDIR)/crti.o \
 $(ELFDIR)/crtbegin.o \
 $(ARCHDIR)/boot.o \
+$(ARCHDIR)/gdt_flush.o \
 $(COBJ) \
 $(ELFDIR)/crtend.o \
 $(ARCHDIR)/crtn.o

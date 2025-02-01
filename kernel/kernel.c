@@ -6,6 +6,8 @@
 #include "lib/include/string.h"
 #include "lib/include/stdio.h"
 #include "lib/include/kbd.h"
+#include "lib/include/gdt.h"
+#include "lib/include/panic.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -42,9 +44,15 @@ __attribute__((noinline)) void test(void)
 void kernel_main(void) 
 {
 
-	terminal_initialize();
+	terminal_initialize(); 
+    gdt_install();
 
-	test();
+    if (!gdt_verify()) {
+        panic("GDT not installed as expected!\n");
+        while (1) { __asm__ volatile("hlt"); }
+    } else {
+        printf("GDT installed successfully!\n");
+    }
 
 	printf("  _____              ____   _____\n / ____|            / __ \\ / ____|\n| |  __  __ _ _   _| |  | | (___  \n| | |_ |/ _` | | | | |  | |\\___ \\ \n| |__| | (_| | |_| | |__| |____) |\n \\_____|\\__,_|\\__, |\\____/|_____/\n               __/ |              \n              |___/               \n");
 

@@ -1,11 +1,17 @@
 #include "include/stdlib.h"
 
+static Header base; /* пустой список для нач. запуска */
+static Header *freep = NULL; /* начало в списке своб. блоков */
+static uint8_t heap[HEAP_SIZE];
+static void *program_break = heap; // Pointer to the current program break
+static void *heap_end = heap + HEAP_SIZE; // Pointer to the end of the heap
+
 void *sbrk(ptrdiff_t increment) {
     void *old_break = program_break;
     void *new_break = (uint8_t *)program_break + increment;
 
     // Check for out-of-bounds conditions
-    if (new_break < heap || new_break > heap_end) {
+    if ((uint8_t *)new_break < heap || (uint8_t *)new_break > (uint8_t *)heap_end) {
         return (void *)-1;  // Failure: Out of heap bounds
     }
 
@@ -14,7 +20,7 @@ void *sbrk(ptrdiff_t increment) {
 }
 
 /* morecore: запрашивает у системы дополнительную память */
-static Header *morecore(unsigned nu) {
+Header *morecore(unsigned nu) {
     if (nu < NALLOC) {
         nu = NALLOC;
     }
