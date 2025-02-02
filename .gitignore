@@ -1,4 +1,5 @@
 *.iso
 *.o
 *.bin
-isodir
+isodir/**/*.bin
+isodir/**/*.cfg
