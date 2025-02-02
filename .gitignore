@@ -1,4 +1,5 @@
 *.iso
 *.o
 *.bin
-isodir
+isodir\boot\grub\*.cfg
+isodir\boot\*.bin
