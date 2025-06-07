@@ -1,8 +1,18 @@
 #include "include/math.h"
 
-double pow(double value, double power) {
-    if(power == 0) return 1;
-    for(int i = 1; i < power; i++) value *= value;
-    if(value > 1000000) value = 1000000;
-    return value;
+double pow(double base, double exponent) {
+    if (exponent == 0) {
+        return 1;
+    }
+
+    double result = 1;
+    for (int i = 0; i < (int)exponent; i++) {
+        result *= base;
+        if (result > 1000000) {
+            result = 1000000;
+            break;
+        }
+    }
+
+    return result;
 }
